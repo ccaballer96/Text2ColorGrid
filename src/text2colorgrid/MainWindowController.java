@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
@@ -42,7 +43,7 @@ public class MainWindowController implements Initializable {
     private TextField timeField;
 
     private Stage mainWindow, matrixView;
-    private String text, patternType;
+    private String text, patternType, colorOp;
     private double time;
     private VBox root;
     private HBox hbox;
@@ -51,12 +52,17 @@ public class MainWindowController implements Initializable {
     private Separator sep;
     private Matrix matrix;
     private int col, row;
+    private boolean reverse;
     @FXML
     private ToggleGroup colorProperties;
     @FXML
     private ToggleGroup pattern;
     @FXML
     private RadioMenuItem l_udlrMenu;
+    @FXML
+    private RadioMenuItem d_udlrMenu;
+    @FXML
+    private CheckBox reverseMode;
 
     public void initData(Stage stage) {
         mainWindow = stage;
@@ -97,26 +103,32 @@ public class MainWindowController implements Initializable {
 
     private void buildMatrix() {
         text = textArea.getText();
-        time = Double.parseDouble(timeField.getText());
+        time = Double.parseDouble(timeField.getText())*1000;
+        reverse = reverseMode.isSelected();
         double sqrt = Math.sqrt(text.length());
         row = (int) Math.round(sqrt);
         col = (int) Math.ceil(sqrt);
         patternType = pattern.getSelectedToggle().toString().substring(17, 23).toUpperCase();
-        System.out.println(patternType);
+        colorOp = colorProperties.getSelectedToggle().toString().substring(45, 52).toUpperCase();
         selectMatrix();
     }
 
     private void selectMatrix() {
         switch (patternType) {
             case "L_UDLR": {
-                matrix = new L_UDLRmatrix(row, col, grid, text);
+                matrix = new L_UDLRmatrix(row, col, 3, time, grid, text, reverse);
                 matrix.fillMatrix();
+                break;
             }
             case "D_UDLR": {
-                matrix = new D_UDLRmatrix(row, col, grid, text);
+                matrix = new D_UDLRmatrix(row, col, 3, time, grid, text ,reverse);
                 matrix.fillMatrix();
+                break;
             }
         }
         //System.out.println(pattern.getSelectedToggle().toString().substring(17, 21));
+    }
+    private void selectColorOp(){
+        
     }
 }

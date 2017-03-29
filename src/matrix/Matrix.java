@@ -18,14 +18,18 @@ import javafx.scene.layout.Pane;
 public abstract class Matrix {
     
     protected final int ROW, COL, DIM_CELL, DIM_MATRIX;
-    protected int pos;
+    protected boolean reverse;
+    protected int pos, colorOp;
+    protected double time;
     protected String text;
     protected GridPane grid;
     protected Pane cell;
     
-    public Matrix(int r, int c, GridPane grid, String txt){
+    public Matrix(int r, int c, int colorOp, double time, GridPane grid, String txt, boolean rev){
         ROW = r; COL = c; this.grid = grid;
-        text = txt;
+        text = txt; reverse = rev;
+        this.colorOp = colorOp;
+        this.time = time;
         DIM_MATRIX = COL * ROW;
         if(50*ROW > 300) DIM_CELL = 300 / Math.max(ROW, COL);
         else DIM_CELL = 50;

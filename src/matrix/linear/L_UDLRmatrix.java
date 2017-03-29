@@ -15,11 +15,10 @@ import javafx.scene.layout.Pane;
  *
  * @author ccaballer96
  */
-public class L_UDLRmatrix extends Matrix{
-    private int pos;
-    
-    public L_UDLRmatrix(int r, int c, GridPane grid, String txt){
-        super(r, c, grid, txt);
+public class L_UDLRmatrix extends Matrix {
+
+    public L_UDLRmatrix(int r, int c, int colorOp, double time, GridPane grid, String txt, boolean rev) {
+        super(r, c, colorOp, time, grid, txt, rev);
     }
 
     @Override
@@ -29,12 +28,24 @@ public class L_UDLRmatrix extends Matrix{
             task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    for (int i = 0; i < COL; i++) {
-                        for (int j = 0; j < ROW; j++) {
-                            cell = (Pane) getNodeByRowColumnIndex(j, i);
-                            pos = i * (COL - 1) + j;
-                            fillCell();
-                            Thread.sleep(3000 / DIM_MATRIX);
+                    if (!reverse) {
+                        for (int i = 0; i < COL; i++) {
+                            for (int j = 0; j < ROW; j++) {
+                                cell = (Pane) getNodeByRowColumnIndex(j, i);
+                                pos = i * (COL - 1) + j;
+                                fillCell();
+                                Thread.sleep((long) time / DIM_MATRIX);
+                            }
+                        }
+                    }
+                    else{
+                        for(int i = COL - 1; i >= 0; i--){
+                            for(int j = ROW -1; j >= 0; j--){
+                                cell = (Pane) getNodeByRowColumnIndex(j, i);
+                                pos = i * (COL - 1) + j;
+                                fillCell();
+                                Thread.sleep((long) time / DIM_MATRIX);
+                            }
                         }
                     }
                     return null;
@@ -51,9 +62,9 @@ public class L_UDLRmatrix extends Matrix{
     private void fillCell() {
         cell.setStyle("-fx-background-color: #7bc043");
     }
-    
+
     @Override
-    public Node getNodeByRowColumnIndex(int row, int col){
+    public Node getNodeByRowColumnIndex(int row, int col) {
         return super.getNodeByRowColumnIndex(row, col);
     }
 }

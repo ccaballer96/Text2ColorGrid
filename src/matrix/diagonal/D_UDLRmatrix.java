@@ -19,15 +19,15 @@ import matrix.Matrix;
  * @author ccaballer96
  */
 public class D_UDLRmatrix extends Matrix {
+
     private int pos;
     private String colorHex;
     private ArrayList<Character> charList;
-    
-    public D_UDLRmatrix(int r, int c, GridPane grid, String txt){
-        super(r, c, grid, txt);
+
+    public D_UDLRmatrix(int r, int c, int colorOp, double time, GridPane grid, String txt, boolean rev) {
+        super(r, c, colorOp, time, grid, txt, rev);
     }
 
-    
     @Override
     public void fillMatrix() {
         try {
@@ -36,34 +36,64 @@ public class D_UDLRmatrix extends Matrix {
                 protected Void call() throws Exception {
                     int aux;
                     diffChars();
-                    for (int i = 0; i < ROW; i++) {
-                        aux = i;
-                        for (int j = 0; (j < COL) && (aux >= 0); j++, aux--) {
-                            cell = (Pane) getNodeByRowColumnIndex(aux, j, grid);
-                            pos = aux * (ROW-1) + j;
-                            fillCell();
-                        }
+                    if (!reverse) {
+                        for (int i = 0; i < ROW; i++) {
+                            aux = i;
+                            for (int j = 0; (j < COL) && (aux >= 0); j++, aux--) {
+                                cell = (Pane) getNodeByRowColumnIndex(aux, j, grid);
+                                pos = aux * (ROW - 1) + j;
+                                fillCell();
+                            }
 
-                        if (COL == ROW) {
-                            Thread.sleep(5000 / ((COL * 2) - 1));
-                        } else {
-                            Thread.sleep(5000 / (ROW * 2));
+                            if (COL == ROW) {
+                                Thread.sleep((long) time / ((COL * 2) - 1));
+                            } else {
+                                Thread.sleep((long) time / (ROW * 2));
+                            }
+                        }
+                        for (int j = 1; j < COL; j++) {
+                            aux = j;
+                            for (int i = ROW - 1; (aux < COL) && i >= 0; i--, aux++) {
+                                cell = (Pane) getNodeByRowColumnIndex(i, aux, grid);
+                                pos = i * (ROW - 1) + aux;
+                                fillCell();
+                            }
+                            if (COL == ROW) {
+                                Thread.sleep((long) time / ((COL * 2) - 1));
+                            } else {
+                                Thread.sleep((long) time / (ROW * 2));
+                            }
                         }
                     }
-                    for (int j = 1; j < COL; j++) {
-                        aux = j;
-                        for (int i = ROW - 1; (aux < COL) && i >= 0; i--, aux++) {
-                            cell = (Pane) getNodeByRowColumnIndex(i, aux, grid);
-                            pos = i * (ROW-1) + aux;
-                            fillCell();
+                    else{
+                        for(int j = COL-1; j >= 1; j--){
+                            aux = j;
+                            for (int i = ROW - 1; (aux < COL) && i >= 0; i--, aux++) {
+                                cell = (Pane) getNodeByRowColumnIndex(i, aux, grid);
+                                pos = i * (ROW - 1) + aux;
+                                fillCell();
+                            }
+                            if (COL == ROW) {
+                                Thread.sleep((long) time / ((COL * 2) - 1));
+                            } else {
+                                Thread.sleep((long) time / (ROW * 2));
+                            }
                         }
-                        if (COL == ROW) {
-                            Thread.sleep(5000 / ((COL * 2) - 1));
-                        } else {
-                            Thread.sleep(5000 / (ROW * 2));
+                        for (int i = ROW-1; i >= 0; i--) {
+                            aux = i;
+                            for (int j = 0; (j < COL) && (aux >= 0); j++, aux--) {
+                                cell = (Pane) getNodeByRowColumnIndex(aux, j, grid);
+                                pos = aux * (ROW - 1) + j;
+                                fillCell();
+                            }
+
+                            if (COL == ROW) {
+                                Thread.sleep((long) time / ((COL * 2) - 1));
+                            } else {
+                                Thread.sleep((long) time / (ROW * 2));
+                            }
                         }
                     }
-                    //Thread.currentThread().notifyAll();
                     return null;
                 }
             };
